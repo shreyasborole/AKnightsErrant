@@ -3,7 +3,7 @@ targetCompatibility = 1.8
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
-project.ext.mainClassName = "com.mygdx.game.desktop.DesktopLauncher"
+project.ext.mainClassName = "com.ake.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
 task run(dependsOn: classes, type: JavaExec) {

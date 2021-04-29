@@ -20,7 +20,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "my-gdx-game"
+        appName = "AKE"
         gdxVersion = '1.9.13'
         roboVMVersion = '2.3.12'
         box2DLightsVersion = '1.5'
