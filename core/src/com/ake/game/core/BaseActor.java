@@ -606,10 +606,14 @@ public class BaseActor extends Actor
         ArrayList<BaseActor> list = new ArrayList<BaseActor>();
         
         Class<?> theClass = null;
-        try
-        {  theClass = Class.forName("com.ake.game.actors." + className);  }
-        catch (Exception error)
-        {  error.printStackTrace();  }
+        try{
+            theClass = Class.forName("com.ake.game.actors." + className);  
+        }
+        catch (Exception error){
+            System.out.println("ERROR: Class " + className + "does not exist");
+            error.printStackTrace();
+            Gdx.app.exit();
+        }
         
         for (Actor a : stage.getActors())
         {

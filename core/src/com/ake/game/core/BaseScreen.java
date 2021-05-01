@@ -11,6 +11,7 @@ public abstract class BaseScreen implements Screen, InputProcessor
 {
     protected Stage mainStage;
     protected Stage uiStage;
+    protected Table hudTable;
     protected Table uiTable;
     
     public BaseScreen()
@@ -18,7 +19,10 @@ public abstract class BaseScreen implements Screen, InputProcessor
         mainStage = new Stage();
         uiStage = new Stage();
         uiTable = new Table();
+        hudTable = new Table();
+        hudTable.setFillParent(true);
         uiTable.setFillParent(true);
+        uiStage.addActor(hudTable);
         uiStage.addActor(uiTable);
         initialize();
     }

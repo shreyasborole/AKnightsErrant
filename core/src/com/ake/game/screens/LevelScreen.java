@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
 
@@ -26,8 +25,11 @@ public class LevelScreen extends BaseScreen {
     private LabelStyle labelStyle;
     private Label fpsLabel;
     private Label seedLabel;
+
     private TileMapRenderer mapRenderer;
     private Hero hero;
+    private Hotbar hotbar;
+    private MiniMap miniMap;
 
     public void initialize() {
         // Label and font setup
@@ -66,15 +68,22 @@ public class LevelScreen extends BaseScreen {
         this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.7f));
         uiStage.addActor(this.seedLabel);
 
-        Table miniMapTable = new MiniMap(uiStage).getMiniMap();
-        uiStage.addActor(miniMapTable);
+        this.hotbar = new Hotbar(uiStage);
+        this.miniMap = new MiniMap(uiStage);
+
+        hudTable.pad(20f);
+        hudTable.add();
+        hudTable.add().expandX().expandY();
+        hudTable.row();
+        hudTable.add();
+        hudTable.add(hotbar.getHotbar()).center();
+        hudTable.add(miniMap.getMiniMap()).right().bottom().pad(5f);
 
         uiTable.pad(10f);
         uiTable.add(fpsLabel).left().top();
         uiTable.add().expandX().expandY();
         uiTable.row();
         uiTable.add(seedLabel).left().bottom();
-        uiTable.add(miniMapTable).right().bottom().pad(5f);
 
         Debug.endTime = Instant.now();
         Debug.measureTime("Level Screen loaded in");
@@ -116,8 +125,12 @@ public class LevelScreen extends BaseScreen {
                 MapState.changeState(portal.getLocation());
             }
         }
+
+        if(Gdx.input.isKeyJustPressed(Keys.L)){
+            this.hotbar.addItem(hero.getWeapon());
+        }
  
-        if (Gdx.input.isKeyPressed(Keys.R)) {
+        if(Gdx.input.isKeyPressed(Keys.R)) {
             if (this.mapRenderer != null) {
                 this.mapRenderer.dispose();
             }

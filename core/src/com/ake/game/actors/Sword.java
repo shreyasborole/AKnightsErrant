@@ -12,6 +12,11 @@ class Sword extends Weapon {
 
     Sword(Hero hero, Stage s) {
         super(hero, s);
+
+        // Item info
+        setID(Items.SWORD);
+        setIcon("icons/sword.png");
+
         this.damage = 4.5f;
         this.weaponAnimation = new SpriteSheet("weapons/sword_attack.png", 1, 12, 0.05f);
         this.weaponAttackAnimation = this.weaponAnimation.getAnimation(PlayMode.NORMAL);

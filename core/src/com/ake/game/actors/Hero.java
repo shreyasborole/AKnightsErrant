@@ -118,19 +118,19 @@ public class Hero extends BaseActor {
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            int dash = 5000;
+            int dash = 100;
             getActions().clear();
             if (this.facingAngle == DIRECTION_NORTH)
-                addAction(Actions.moveBy(0f, dash * dt, 0.3f));
+                addAction(Actions.moveBy(0f, dash, 0.3f));
             if (this.facingAngle == DIRECTION_WEST)
-                addAction(Actions.moveBy(-1f * dash * dt, 0, 0.3f));
+                addAction(Actions.moveBy(-1f * dash, 0, 0.3f));
             if (this.facingAngle == DIRECTION_SOUTH)
-                addAction(Actions.moveBy(0, -1f * dash * dt, 0.3f));
+                addAction(Actions.moveBy(0, -1f * dash, 0.3f));
             if (this.facingAngle == DIRECTION_EAST){
-                addAction(Actions.moveBy(dash * dt, 0, 0.3f));
+                addAction(Actions.moveBy(dash, 0, 0.3f));
             }
         }
-            
+        
         alignCamera();
         boundToWorld();
         applyPhysics(dt);
@@ -158,6 +158,10 @@ public class Hero extends BaseActor {
         default:
             break;
         }
+    }
+
+    public Weapon getWeapon(){
+        return this.weapon;
     }
 
     public void attack() {
