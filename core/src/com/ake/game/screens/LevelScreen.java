@@ -68,9 +68,11 @@ public class LevelScreen extends BaseScreen {
         this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.7f));
         uiStage.addActor(this.seedLabel);
 
+        // Hotbar and Minimap setup
         this.hotbar = new Hotbar(uiStage);
         this.miniMap = new MiniMap(uiStage);
 
+        // UI building for HUD
         hudTable.pad(20f);
         hudTable.add();
         hudTable.add().expandX().expandY();
@@ -79,6 +81,7 @@ public class LevelScreen extends BaseScreen {
         hudTable.add(hotbar.getHotbar()).center();
         hudTable.add(miniMap.getMiniMap()).right().bottom().pad(5f);
 
+        // UI building for debug UI
         uiTable.pad(10f);
         uiTable.add(fpsLabel).left().top();
         uiTable.add().expandX().expandY();
@@ -96,7 +99,6 @@ public class LevelScreen extends BaseScreen {
             this.hero.preventOverlap(NPCActor);
             if(this.hero.isAttack()){
                 if(hero.isWithinDistance(25f, NPCActor)){
-                    // final float angle = this.hero.getMotionAngle();
                     final float angle = this.hero.getMotionAngle();
                     final float magnitude = 150f;
                     NPCActor.getActions().clear();
