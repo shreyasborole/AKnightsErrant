@@ -26,6 +26,7 @@ public class MenuScreen extends BaseScreen
         BaseActor title = new BaseActor(0,0, mainStage);
         title.loadTexture( "starfish-collector.png" );
         title.moveBy(0,100);
+        uiStage.addActor(title);
         
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         Texture buttonTex = new Texture(Gdx.files.internal("button.png"));

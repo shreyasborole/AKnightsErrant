@@ -16,13 +16,14 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
 
 
 public class LevelScreen extends BaseScreen {
-    private LabelStyle labelStyle;
+    public static LabelStyle labelStyle;
     private Label fpsLabel;
     private Label seedLabel;
 
@@ -31,10 +32,13 @@ public class LevelScreen extends BaseScreen {
     private Hotbar hotbar;
     private MiniMap miniMap;
 
+    // Set this as true to make FPS and Seed label visible
+    private final boolean debugFlag = true;
+
     public void initialize() {
         // Label and font setup
-        this.labelStyle = new LabelStyle();
-        this.labelStyle.font = AKEGame.getFontConfiguration();
+        LevelScreen.labelStyle = new LabelStyle();
+        LevelScreen.labelStyle.font = AKEGame.getFontConfiguration();
 
         // Map
         this.mapRenderer = new TileMapRenderer(mainStage, MapState.currentNode.getSeed());
@@ -55,45 +59,33 @@ public class LevelScreen extends BaseScreen {
         this.hero = new Hero(MapState.heroLocation, mainStage);
 
         new NPCTest(this.hero.getX() + 100f, this.hero.getY() + 100f, mainStage);
-        
-        // FPS Label
-        this.fpsLabel = new Label("FPS: ", this.labelStyle);
-        this.fpsLabel.setFontScale(0.3f);
-        this.fpsLabel.setColor(new Color(1f, 1f, 1f, 0.7f));
-        uiStage.addActor(this.fpsLabel);
-
-        // Seed Label
-        this.seedLabel = new Label("Seed: " + this.mapRenderer.getSeed(), this.labelStyle);
-        this.seedLabel.setFontScale(0.2f);
-        this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.7f));
-        uiStage.addActor(this.seedLabel);
 
         // Hotbar and Minimap setup
         this.hotbar = new Hotbar(uiStage);
         this.miniMap = new MiniMap(uiStage);
 
+        this.hotbar.addItem(hero.getWeapon());
+
         // UI building for HUD
         hudTable.pad(20f);
-        hudTable.add();
+        hudTable.add(this.hero.getHealthBar()).top();
         hudTable.add().expandX().expandY();
+        hudTable.add();
         hudTable.row();
         hudTable.add();
         hudTable.add(hotbar.getHotbar()).center();
         hudTable.add(miniMap.getMiniMap()).right().bottom().pad(5f);
 
-        // UI building for debug UI
-        uiTable.pad(10f);
-        uiTable.add(fpsLabel).left().top();
-        uiTable.add().expandX().expandY();
-        uiTable.row();
-        uiTable.add(seedLabel).left().bottom();
+        if(debugFlag)
+            debugScreen();
 
         Debug.endTime = Instant.now();
         Debug.measureTime("Level Screen loaded in");
     }
     
     public void update(float dt) {
-        this.fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+        if(debugFlag)
+            this.fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
 
         for(BaseActor NPCActor : BaseActor.getList(mainStage, "NPCTest")){
             this.hero.preventOverlap(NPCActor);
@@ -131,8 +123,18 @@ public class LevelScreen extends BaseScreen {
         if(Gdx.input.isKeyJustPressed(Keys.L)){
             this.hotbar.addItem(hero.getWeapon());
         }
- 
-        if(Gdx.input.isKeyPressed(Keys.R)) {
+
+        if(this.hero.isDead()){
+            if (this.mapRenderer != null) 
+                this.mapRenderer.dispose();
+            AKEGame.setActiveScreen(new MenuScreen());
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.F)) {
+            this.hero.attacked(4);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Keys.R)) {
             if (this.mapRenderer != null) {
                 this.mapRenderer.dispose();
             }
@@ -140,7 +142,7 @@ public class LevelScreen extends BaseScreen {
             AKEGame.setActiveScreen(new LevelScreen());
         }
 
-        if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
             Gdx.app.exit();
         }
     }
@@ -152,6 +154,31 @@ public class LevelScreen extends BaseScreen {
             return true;
         }
         return false;
+    }
+
+    private void debugScreen(){
+        // FPS Label
+        this.fpsLabel = new Label("FPS: ", LevelScreen.labelStyle);
+        this.fpsLabel.setFontScale(0.3f);
+        this.fpsLabel.setColor(new Color(1f, 1f, 1f, 0.7f));
+        uiStage.addActor(this.fpsLabel);
+
+        // Seed Label
+        this.seedLabel = new Label("Seed: " + this.mapRenderer.getSeed(), LevelScreen.labelStyle);
+        this.seedLabel.setFontScale(0.2f);
+        this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.7f));
+        uiStage.addActor(this.seedLabel);
+
+
+        // UI building for debug UI
+        uiTable.pad(10f);
+        uiTable.add().left().top();
+        uiTable.add().expandX().expandY();
+        uiTable.row();
+        uiTable.add(seedLabel).left();
+        uiTable.add();
+        uiTable.row();
+        uiTable.add(fpsLabel).left().bottom();
     }
     
 }

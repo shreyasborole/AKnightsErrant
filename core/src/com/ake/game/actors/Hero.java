@@ -7,8 +7,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
@@ -22,12 +24,18 @@ public class Hero extends BaseActor {
     public static final float DIRECTION_EAST = 0f;
     public static final float DIRECTION_WEST = 180f;
     private float facingAngle;
+    private final int totalHealth = 20;
+    private final int dashLimit = 4;
+
+    private int currentHealth;
+    private int dashCount;
 
     private Array<SpriteSheet> spriteSheets;
     private Animation<TextureRegion> run;
     private Animation<TextureRegion> idle;
 
     private Weapon weapon;
+    private ImageHealthBar healthBar;
 
     Location location = Hero.Location.CENTER;
 
@@ -46,6 +54,10 @@ public class Hero extends BaseActor {
         this.facingAngle = DIRECTION_EAST;
 
         this.weapon = new Sword(this, s);
+        this.currentHealth = totalHealth;
+        this.healthBar = new ImageHealthBar(500, 20);
+
+        this.dashCount = 0;
 
         setBoundaryPolygon(8);
         setAcceleration(1000);
@@ -120,14 +132,20 @@ public class Hero extends BaseActor {
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
             int dash = 100;
             getActions().clear();
-            if (this.facingAngle == DIRECTION_NORTH)
-                addAction(Actions.moveBy(0f, dash, 0.3f));
-            if (this.facingAngle == DIRECTION_WEST)
-                addAction(Actions.moveBy(-1f * dash, 0, 0.3f));
-            if (this.facingAngle == DIRECTION_SOUTH)
-                addAction(Actions.moveBy(0, -1f * dash, 0.3f));
-            if (this.facingAngle == DIRECTION_EAST){
-                addAction(Actions.moveBy(dash, 0, 0.3f));
+            if(dashCount == dashLimit){
+                addAction(Actions.sequence(Actions.delay(10f), Actions.run(() -> dashCount = 0)));
+            }
+            else{
+                if (this.facingAngle == DIRECTION_NORTH)
+                    addAction(Actions.moveBy(0f, dash, 0.3f));
+                if (this.facingAngle == DIRECTION_WEST)
+                    addAction(Actions.moveBy(-1f * dash, 0, 0.3f));
+                if (this.facingAngle == DIRECTION_SOUTH)
+                    addAction(Actions.moveBy(0, -1f * dash, 0.3f));
+                if (this.facingAngle == DIRECTION_EAST){
+                    addAction(Actions.moveBy(dash, 0, 0.3f));
+                }
+                ++dashCount;
             }
         }
         
@@ -164,11 +182,24 @@ public class Hero extends BaseActor {
         return this.weapon;
     }
 
+    public Table getHealthBar(){
+        return this.healthBar.getHealthBar();
+    }
+
     public void attack() {
         this.weapon.attack();
     }
 
+    public void attacked(int damage){
+        currentHealth -= damage;
+        this.healthBar.setValue(MathUtils.map(0, totalHealth, 0f, 1f, currentHealth));
+    }
+
     public boolean isAttack(){
         return this.weapon.isAttack();
+    }
+
+    public boolean isDead(){
+        return currentHealth <= 0;
     }
 }

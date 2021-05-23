@@ -13,21 +13,41 @@ public class MapState {
     public static MapNode currentNode;
     public static WorldGenerator worldGenerator;
 
+    private static Stage stage;
+
     public static final int worldSize = 16;
 
-    public static int[][] worldMiniMap;
+    public static int[][] worldMiniMap; // To be removed
 
     public static void initialize(long seed) {
         // Debug.clearScreen();
         MapState.worldGenerator = new WorldGenerator(worldSize, seed);
         currentNode = worldGenerator.getSource();
         heroLocation = Hero.Location.CENTER;
+        // Initialized for MiniMap
         worldMiniMap = new int[worldSize][worldSize];
         for(int[] row : worldMiniMap)
             Arrays.fill(row, 0);
     }
 
+    public static boolean[] getPortals(){
+        // TOP RIGHT BOTTOM LEFT
+        boolean[] portalStates = {false, false, false, false};
+        int x = currentNode.getX();
+        int y = currentNode.getY();
+        if (worldGenerator.getLeft(x, y) != null)
+            portalStates[1] = true;
+        if (worldGenerator.getBottom(x, y) != null)
+            portalStates[2] = true;
+        if (worldGenerator.getRight(x, y) != null)
+            portalStates[3] = true;
+        if (worldGenerator.getTop(x, y) != null)
+            portalStates[0] = true;
+        return portalStates;
+    }
+
     public static void setPortals(Stage stage) {
+        MapState.stage = stage;
         int x = currentNode.getX();
         int y = currentNode.getY();
         if (worldGenerator.getLeft(x, y) != null)

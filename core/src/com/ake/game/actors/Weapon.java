@@ -8,7 +8,7 @@ import com.ake.game.core.SpriteSheet;
 abstract class Weapon extends Item{
     
     protected Hero hero;
-    protected float damage;
+    protected int damage;
     protected SpriteSheet weaponAnimation;
     protected Animation<TextureRegion> weaponAttackAnimation;
     protected boolean attackFlag;
@@ -29,6 +29,10 @@ abstract class Weapon extends Item{
 
     protected boolean isAttack() {
         return attackFlag;
+    }
+
+    public int getDamage(){
+        return damage;
     }
 
     abstract void attack();

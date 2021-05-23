@@ -66,8 +66,7 @@ public abstract class BaseGame extends Game
      *  Used to switch screens while game is running.
      *  Method is static to simplify usage.
      */
-    public static void setActiveScreen(BaseScreen s)
-    {
+    public static void setActiveScreen(BaseScreen s){
         game.setScreen(s);
     }
 

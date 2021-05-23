@@ -17,7 +17,7 @@ class Sword extends Weapon {
         setID(Items.SWORD);
         setIcon("icons/sword.png");
 
-        this.damage = 4.5f;
+        this.damage = 6;
         this.weaponAnimation = new SpriteSheet("weapons/sword_attack.png", 1, 12, 0.05f);
         this.weaponAttackAnimation = this.weaponAnimation.getAnimation(PlayMode.NORMAL);
 
@@ -47,12 +47,7 @@ class Sword extends Weapon {
         }
 
         // Delaying action complete flag; in order for the act() loop to run the idle rotation action
-        addAction(Actions.sequence(Actions.delay(0.7f), Actions.run(new Runnable(){
-            @Override
-            public void run() {
-                actionComplete = true;
-            }
-        })));
+        addAction(Actions.sequence(Actions.delay(0.7f), Actions.run(() -> actionComplete = true)));
     }
 
     @Override
