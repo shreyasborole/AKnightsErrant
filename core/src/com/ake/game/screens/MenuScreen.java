@@ -23,20 +23,26 @@ public class MenuScreen extends BaseScreen
 {
     
     public void initialize(){
-        BaseActor title = new BaseActor(0,0, mainStage);
-        title.loadTexture( "starfish-collector.png" );
-        title.moveBy(0,100);
-        uiStage.addActor(title);
+        BaseActor background = new BaseActor(0, 0, uiStage);
+        background.loadTexture("background1.jpg");
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        background.setZIndex(0);
+
+        BaseActor title = new BaseActor(0,0, uiStage);
+        title.loadTexture("A-Knights-Errant.png");
+        title.scaleBy(0.5f);
         
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         Texture buttonTex = new Texture(Gdx.files.internal("button.png"));
         textButtonStyle.up = new NinePatchDrawable(new NinePatch(buttonTex, 24, 24, 24, 24));
-        textButtonStyle.font = AKEGame.getFontConfiguration(50f, Color.FIREBRICK);
+        textButtonStyle.font = AKEGame.getFontConfiguration(35f, new Color(0.227f, 0.167f, 0.32f, 1f));
         
         TextButton startButton = new TextButton("Start", textButtonStyle);
+        startButton.scaleBy(0.5f);
         uiStage.addActor(startButton);
 
         TextButton exitButton = new TextButton("Exit", textButtonStyle);
+        exitButton.scaleBy(0.5f);
         uiStage.addActor(exitButton);
         
         startButton.addListener(new ClickListener() {
@@ -75,7 +81,7 @@ public class MenuScreen extends BaseScreen
             }
         });
 
-        uiTable.add(title).pad(10f);
+        uiTable.add(title).pad(50f);
         uiTable.row();
         uiTable.add(startButton).pad(10f);
         uiTable.row();
