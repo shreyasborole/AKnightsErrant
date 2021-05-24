@@ -13,7 +13,7 @@ public class MapState {
     public static MapNode currentNode;
     public static WorldGenerator worldGenerator;
 
-    private static Stage stage;
+    private static Stage stage = null;
 
     public static final int worldSize = 16;
 

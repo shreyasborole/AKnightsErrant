@@ -24,8 +24,9 @@ public class Hero extends BaseActor {
     public static final float DIRECTION_EAST = 0f;
     public static final float DIRECTION_WEST = 180f;
     private float facingAngle;
+    private boolean blockInput;
     private final int totalHealth = 20;
-    private final int dashLimit = 4;
+    private final int dashLimit = 50;
 
     private int currentHealth;
     private int dashCount;
@@ -58,6 +59,8 @@ public class Hero extends BaseActor {
         this.healthBar = new ImageHealthBar(500, 20);
 
         this.dashCount = 0;
+
+        this.blockInput = false;
 
         setBoundaryPolygon(8);
         setAcceleration(1000);
@@ -94,61 +97,62 @@ public class Hero extends BaseActor {
         setOrigin(Align.bottomRight);
         setSize(42f, 66f);
 
-        // hero movement controls
-        if (Gdx.input.isKeyPressed(Keys.LEFT)){
-            accelerateAtAngle(DIRECTION_WEST);
-            this.facingAngle = DIRECTION_WEST;
-        }
-        if (Gdx.input.isKeyPressed(Keys.RIGHT)){
-            accelerateAtAngle(DIRECTION_EAST);
-            this.facingAngle = DIRECTION_EAST;
-        }
-        if (Gdx.input.isKeyPressed(Keys.UP)){
-            accelerateAtAngle(DIRECTION_NORTH);
-            this.facingAngle = DIRECTION_NORTH;
-        }
-        if (Gdx.input.isKeyPressed(Keys.DOWN)){
-            accelerateAtAngle(DIRECTION_SOUTH);
-            this.facingAngle = DIRECTION_SOUTH;
-        }
-
-        if (Gdx.input.isKeyPressed(Keys.A)) {
-            accelerateAtAngle(DIRECTION_WEST);
-            this.facingAngle = DIRECTION_WEST;
-        }
-        if (Gdx.input.isKeyPressed(Keys.D)) {
-            accelerateAtAngle(DIRECTION_EAST);
-            this.facingAngle = DIRECTION_EAST;
-        }
-        if (Gdx.input.isKeyPressed(Keys.W)) {
-            accelerateAtAngle(DIRECTION_NORTH);
-            this.facingAngle = DIRECTION_NORTH;
-        }
-        if (Gdx.input.isKeyPressed(Keys.S)) {
-            accelerateAtAngle(DIRECTION_SOUTH);
-            this.facingAngle = DIRECTION_SOUTH;
-        }
-
-        if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            int dash = 100;
-            getActions().clear();
-            if(dashCount == dashLimit){
-                addAction(Actions.sequence(Actions.delay(10f), Actions.run(() -> dashCount = 0)));
+        if(!this.blockInput){
+            // hero movement controls
+            if (Gdx.input.isKeyPressed(Keys.LEFT)){
+                accelerateAtAngle(DIRECTION_WEST);
+                this.facingAngle = DIRECTION_WEST;
             }
-            else{
-                if (this.facingAngle == DIRECTION_NORTH)
-                    addAction(Actions.moveBy(0f, dash, 0.3f));
-                if (this.facingAngle == DIRECTION_WEST)
-                    addAction(Actions.moveBy(-1f * dash, 0, 0.3f));
-                if (this.facingAngle == DIRECTION_SOUTH)
-                    addAction(Actions.moveBy(0, -1f * dash, 0.3f));
-                if (this.facingAngle == DIRECTION_EAST){
-                    addAction(Actions.moveBy(dash, 0, 0.3f));
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)){
+                accelerateAtAngle(DIRECTION_EAST);
+                this.facingAngle = DIRECTION_EAST;
+            }
+            if (Gdx.input.isKeyPressed(Keys.UP)){
+                accelerateAtAngle(DIRECTION_NORTH);
+                this.facingAngle = DIRECTION_NORTH;
+            }
+            if (Gdx.input.isKeyPressed(Keys.DOWN)){
+                accelerateAtAngle(DIRECTION_SOUTH);
+                this.facingAngle = DIRECTION_SOUTH;
+            }
+
+            if (Gdx.input.isKeyPressed(Keys.A)) {
+                accelerateAtAngle(DIRECTION_WEST);
+                this.facingAngle = DIRECTION_WEST;
+            }
+            if (Gdx.input.isKeyPressed(Keys.D)) {
+                accelerateAtAngle(DIRECTION_EAST);
+                this.facingAngle = DIRECTION_EAST;
+            }
+            if (Gdx.input.isKeyPressed(Keys.W)) {
+                accelerateAtAngle(DIRECTION_NORTH);
+                this.facingAngle = DIRECTION_NORTH;
+            }
+            if (Gdx.input.isKeyPressed(Keys.S)) {
+                accelerateAtAngle(DIRECTION_SOUTH);
+                this.facingAngle = DIRECTION_SOUTH;
+            }
+
+            if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+                int dash = 100;
+                getActions().clear();
+                if(dashCount == dashLimit){
+                    addAction(Actions.sequence(Actions.delay(5f), Actions.run(() -> dashCount = 0)));
                 }
-                ++dashCount;
+                else{
+                    if (this.facingAngle == DIRECTION_NORTH)
+                        addAction(Actions.moveBy(0f, dash, 0.3f));
+                    if (this.facingAngle == DIRECTION_WEST)
+                        addAction(Actions.moveBy(-1f * dash, 0, 0.3f));
+                    if (this.facingAngle == DIRECTION_SOUTH)
+                        addAction(Actions.moveBy(0, -1f * dash, 0.3f));
+                    if (this.facingAngle == DIRECTION_EAST){
+                        addAction(Actions.moveBy(dash, 0, 0.3f));
+                    }
+                    ++dashCount;
+                }
             }
         }
-        
         alignCamera();
         boundToWorld();
         applyPhysics(dt);
@@ -201,5 +205,9 @@ public class Hero extends BaseActor {
 
     public boolean isDead(){
         return currentHealth <= 0;
+    }
+
+    public void blockInput(){
+        this.blockInput = true;
     }
 }

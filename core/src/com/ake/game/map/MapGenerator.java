@@ -146,19 +146,19 @@ public class MapGenerator {
                     this.noiseMap[i][MAP_COLS / 2 - 2] = 1;
                 }
                 // TOP
-                if (portals[0] == false && i < MAP_ROWS / 2) {
+                if (portals[0] == false && i > MAP_ROWS / 2) {
                     this.noiseMap[i][j] = noiseValue;
                 }
                 // RIGHT
-                if (portals[1] == false && j > MAP_COLS / 2) {
+                if (portals[1] == false && j < MAP_COLS / 2) {
                     this.noiseMap[i][j] = noiseValue;
                 }
                 // BOTTOM
-                if (portals[2] == false && i > MAP_ROWS / 2) {
+                if (portals[2] == false && i < MAP_ROWS / 2) {
                     this.noiseMap[i][j] = noiseValue;
                 }
                 // LEFT
-                if (portals[3] == false && j < MAP_COLS / 2) {
+                if (portals[3] == false && j > MAP_COLS / 2) {
                     this.noiseMap[i][j] = noiseValue;
                 }
             }

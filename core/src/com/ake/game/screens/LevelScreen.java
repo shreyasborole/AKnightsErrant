@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -125,9 +126,19 @@ public class LevelScreen extends BaseScreen {
         }
 
         if(this.hero.isDead()){
-            if (this.mapRenderer != null) 
-                this.mapRenderer.dispose();
-            AKEGame.setActiveScreen(new MenuScreen());
+            Image died = new Image(new Texture("died.png"));
+            died.setX(Gdx.graphics.getWidth() / 2 - died.getWidth() / 2);
+            died.setY(Gdx.graphics.getHeight() / 2);
+            uiStage.addActor(died);
+            this.hero.blockInput();
+            this.hide();
+            died.addAction(Actions.sequence(Actions.alpha(0f), Actions.alpha(0.7f, 1f), Actions.delay(1f),
+            Actions.run(() -> this.triggerFadeOut()), Actions.delay(2f),
+            Actions.run(() -> {
+                if (this.mapRenderer != null)
+                    this.mapRenderer.dispose();
+                    AKEGame.setActiveScreen(new MenuScreen());
+            })));
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.F)) {

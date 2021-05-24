@@ -3,8 +3,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.Screen;
 
@@ -14,6 +14,10 @@ public abstract class BaseScreen implements Screen, InputProcessor
     protected Stage uiStage;
     protected Table hudTable;
     protected Table uiTable;
+
+    private ShapeRenderer shapeRenderer;
+    private float alpha;
+    private boolean alphaDirection;
     
     public BaseScreen()
     {
@@ -25,6 +29,9 @@ public abstract class BaseScreen implements Screen, InputProcessor
         uiTable.setFillParent(true);
         uiStage.addActor(hudTable);
         uiStage.addActor(uiTable);
+        shapeRenderer = new ShapeRenderer();
+        alpha = 1f;
+        alphaDirection = false;
         initialize();
     }
 
@@ -52,6 +59,42 @@ public abstract class BaseScreen implements Screen, InputProcessor
         // draw the graphics
         mainStage.draw();
         uiStage.draw();
+        
+        // fade in/out effect
+        // effect is not linear due to variable framerate
+        if(alpha >= 0 || alphaDirection){
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0f, 0f, 0f, alpha);
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+            if(alphaDirection){
+                if(alpha >= 1){
+                    alphaDirection = false;
+                    return;
+                }
+                if (dt > 200)
+                    alpha += 0.001f;
+                else if (dt <= 200 && dt > 100)
+                    alpha += 0.005f;
+                else if (dt <= 100)
+                    alpha += 0.01f;
+            }else{
+                if(dt > 200)
+                    alpha -= 0.001f;
+                else if(dt <= 200 && dt > 100)
+                    alpha -= 0.005f;
+                else if(dt <= 100)
+                    alpha -= 0.01f;
+            }
+        }
+    }
+
+    public void triggerFadeOut(){
+        alphaDirection = true;
     }
 
     // methods required by Screen interface

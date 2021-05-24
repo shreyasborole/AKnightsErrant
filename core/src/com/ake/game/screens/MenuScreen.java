@@ -35,25 +35,31 @@ public class MenuScreen extends BaseScreen
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         Texture buttonTex = new Texture(Gdx.files.internal("button.png"));
         textButtonStyle.up = new NinePatchDrawable(new NinePatch(buttonTex, 24, 24, 24, 24));
-        textButtonStyle.font = AKEGame.getFontConfiguration(35f, new Color(0.227f, 0.167f, 0.32f, 1f));
+        textButtonStyle.font = AKEGame.getFontConfiguration(30f, new Color(0.55f, 0.24f, 0.46f, 1f));
+
+        TextButtonStyle inactiveTextButtonStyle = new TextButtonStyle();
+        inactiveTextButtonStyle.up = new NinePatchDrawable(new NinePatch(buttonTex, 24, 24, 24, 24));
+        inactiveTextButtonStyle.font = AKEGame.getFontConfiguration(30f, new Color(0.82f, 0.91f, 0.42f, 1f));
         
         TextButton startButton = new TextButton("Start", textButtonStyle);
         startButton.scaleBy(0.5f);
+        startButton.setColor(new Color(0.08f, 0.08f, 0.04f, 0.7f));
         uiStage.addActor(startButton);
 
         TextButton exitButton = new TextButton("Exit", textButtonStyle);
         exitButton.scaleBy(0.5f);
+        exitButton.setColor(new Color(0.08f, 0.08f, 0.04f, 0.7f));
         uiStage.addActor(exitButton);
         
         startButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                startButton.setColor(Color.GRAY);
+                startButton.setStyle(inactiveTextButtonStyle);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                startButton.setColor(Color.WHITE);
+                startButton.setStyle(textButtonStyle);
             }
 
             @Override
@@ -66,12 +72,12 @@ public class MenuScreen extends BaseScreen
         exitButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                exitButton.setColor(Color.GRAY);
+                exitButton.setStyle(inactiveTextButtonStyle);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                exitButton.setColor(Color.WHITE);
+                exitButton.setStyle(textButtonStyle);
             }
 
             @Override
