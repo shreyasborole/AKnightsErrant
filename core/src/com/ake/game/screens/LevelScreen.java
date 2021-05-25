@@ -70,9 +70,14 @@ public class LevelScreen extends BaseScreen {
         // UI building for HUD
         hudTable.pad(20f);
         hudTable.add(this.hero.getHealthBar()).top();
+        hudTable.add();
+        hudTable.row();
+
+        hudTable.add(this.hero.getXPBar()).top().left();
         hudTable.add().expandX().expandY();
         hudTable.add();
         hudTable.row();
+        
         hudTable.add();
         hudTable.add(hotbar.getHotbar()).center();
         hudTable.add(miniMap.getMiniMap()).right().bottom().pad(5f);
@@ -143,6 +148,10 @@ public class LevelScreen extends BaseScreen {
 
         if (Gdx.input.isKeyJustPressed(Keys.F)) {
             this.hero.attacked(4);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.G)) {
+            this.hero.addXP(4);
         }
 
         if(Gdx.input.isKeyJustPressed(Keys.R)) {

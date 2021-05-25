@@ -4,6 +4,7 @@ import com.ake.game.core.*;
 import com.ake.game.map.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
@@ -26,9 +27,11 @@ public class Hero extends BaseActor {
     private float facingAngle;
     private boolean blockInput;
     private final int totalHealth = 20;
+    private final int totalXP = 128;
     private final int dashLimit = 50;
 
     private int currentHealth;
+    private int currentXP;
     private int dashCount;
 
     private Array<SpriteSheet> spriteSheets;
@@ -37,6 +40,7 @@ public class Hero extends BaseActor {
 
     private Weapon weapon;
     private ImageHealthBar healthBar;
+    private ImageXPBar xpBar;
 
     Location location = Hero.Location.CENTER;
 
@@ -57,6 +61,7 @@ public class Hero extends BaseActor {
         this.weapon = new Sword(this, s);
         this.currentHealth = totalHealth;
         this.healthBar = new ImageHealthBar(500, 20);
+        this.xpBar = new ImageXPBar(500, 20);
 
         this.dashCount = 0;
 
@@ -190,12 +195,30 @@ public class Hero extends BaseActor {
         return this.healthBar.getHealthBar();
     }
 
+    public Table getXPBar(){
+        return this.xpBar.getXPBar();
+    }
+
+    public void addXP(int XP){
+        currentXP += XP;
+        if(currentXP >= totalXP)
+            this.xpBar.setValue(MathUtils.map(0, totalXP, 0f, 1f, currentXP));
+        this.xpBar.triggerXP(XP);
+        this.xpBar.setValue(MathUtils.map(0, totalXP, 0f, 1f, currentXP));
+    }
+
     public void attack() {
         this.weapon.attack();
     }
 
     public void attacked(int damage){
         currentHealth -= damage;
+        if(currentHealth <= 0){
+            addAction(Actions.sequence(Actions.color(new Color(0f, 0f, 0f, 0.3f), 0.2f), Actions.color(Color.WHITE)));
+            this.healthBar.setValue(MathUtils.map(0, totalHealth, 0f, 1f, currentHealth));
+        }
+        addAction(Actions.sequence(Actions.color(new Color(0f, 0f, 0f , 0.3f), 0.2f), Actions.color(Color.WHITE)));
+        this.healthBar.triggerDamage(damage);
         this.healthBar.setValue(MathUtils.map(0, totalHealth, 0f, 1f, currentHealth));
     }
 

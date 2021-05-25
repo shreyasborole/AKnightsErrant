@@ -12,17 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.ake.game.screens.LevelScreen;
 import com.ake.game.utils.*;
 
-public class ImageHealthBar extends ProgressBar{
-    private Table healthBarLayout;
-    private Label healthText;
-    private Label damageLabel;
+public class ImageXPBar extends ProgressBar {
+    private Table XPBarLayout;
+    private Label XPText;
+    private Label xpAddLabel;
     private TextureRegion leftBorder;
     private TextureRegion rightBorder;
 
-    public ImageHealthBar(int width, int height){
+    public ImageXPBar(int width, int height) {
         super(0f, 1f, 0.01f, false, new ProgressBarStyle());
 
-        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("progressbar/health_bar.atlas"));
+        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("progressbar/xp_bar.atlas"));
         getStyle().background = new TextureRegionDrawable(textureAtlas.findRegion("background"));
         getStyle().knob = Utils.getColoredDrawable(0, height, Color.GREEN);
         getStyle().knobBefore = new TextureRegionDrawable(textureAtlas.findRegion("knobbefore"));
@@ -33,21 +33,22 @@ public class ImageHealthBar extends ProgressBar{
         setWidth(width);
         setHeight(height);
 
-        setValue(1f);
+        setValue(0f);
         setAnimateDuration(0.25f);
-        
-        this.healthBarLayout = new Table();
-        healthBarLayout.pad(10f);
-        this.healthText = new Label("HP", LevelScreen.labelStyle);
-        this.healthText.setFontScale(0.3f);
-        this.healthText.setColor(new Color(0.8f, 0f, 0f, 1f));
 
-        this.damageLabel = new Label("-99", LevelScreen.labelStyle);
-        this.damageLabel.setFontScale(0.3f);
-        this.damageLabel.getColor().a = 0f;
-        healthBarLayout.add(healthText);
-        healthBarLayout.add(this);
-        healthBarLayout.add(damageLabel);
+        this.XPBarLayout = new Table();
+        this.XPBarLayout.pad(10f);
+        this.XPText = new Label("XP", LevelScreen.labelStyle);
+        this.XPText.setFontScale(0.3f);
+        this.XPText.setColor(new Color(0, 0f, 0.8f, 1f));
+
+        this.xpAddLabel = new Label("+99", LevelScreen.labelStyle);
+        this.xpAddLabel.setFontScale(0.3f);
+        this.xpAddLabel.getColor().a = 0f;
+
+        XPBarLayout.add(XPText);
+        XPBarLayout.add(this);
+        XPBarLayout.add(xpAddLabel);
     }
 
     @Override
@@ -72,15 +73,15 @@ public class ImageHealthBar extends ProgressBar{
         setWidth(prevWidth);
     }
 
-    public Table getHealthBar() {
+    public Table getXPBar() {
         Action loading = Actions.sequence(Actions.alpha(0f), Actions.alpha(0.75f, 1f));
-        this.healthBarLayout.addAction(loading);
-        return this.healthBarLayout;
+        this.XPBarLayout.addAction(loading);
+        return this.XPBarLayout;
     }
 
-    public void triggerDamage(int damage){
-        damageLabel.setText("- " + damage);
+    public void triggerXP(int xp) {
+        xpAddLabel.setText("+ " + xp);
         Action show = Actions.sequence(Actions.color(Color.YELLOW, 0.1f), Actions.alpha(0.7f, 0.3f), Actions.color(new Color(1f, 1f, 1f, 0f)));
-        damageLabel.addAction(show);
+        xpAddLabel.addAction(show);
     }
 }
