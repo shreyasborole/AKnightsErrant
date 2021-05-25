@@ -50,6 +50,14 @@ public class WorldGenerator {
         return this.pathMatrix;
     }
 
+    public int getRows(){
+        return this.rows;
+    }
+
+    public int getCols(){
+        return this.cols;
+    }
+
     public MapNode getSource(){
         return this.pathMatrix[this.initialNode.getRow()][this.initialNode.getCol()];
     }

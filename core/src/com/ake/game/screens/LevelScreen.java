@@ -28,14 +28,16 @@ public class LevelScreen extends BaseScreen {
     private Label fpsLabel;
     private Label seedLabel;
     private Label worldSeedLabel;
-    private Label currentMap;
+    private Label currentMapLabel;
+    private Label mapSizeLabel;
+    private Label worldSizeLabel;
 
     private TileMapRenderer mapRenderer;
     private Hero hero;
     private Hotbar hotbar;
     private MiniMap miniMap;
 
-    // Set this as true to make FPS and Seed label visible
+    // Set this as true to make debug info visible
     private final boolean debugFlag = true;
 
     public void initialize() {
@@ -187,21 +189,36 @@ public class LevelScreen extends BaseScreen {
 
         // Map Seed Label
         this.seedLabel = new Label("Map Seed: " + this.mapRenderer.getSeed(), LevelScreen.labelStyle);
-        this.seedLabel.setFontScale(0.25f);
+        this.seedLabel.setFontScale(0.22f);
         this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
         uiStage.addActor(this.seedLabel);
 
         // Word Seed Label
         this.worldSeedLabel = new Label("World Seed: " + MapState.worldGenerator.getSeed(), LevelScreen.labelStyle);
-        this.worldSeedLabel.setFontScale(0.25f);
+        this.worldSeedLabel.setFontScale(0.22f);
         this.worldSeedLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
         uiStage.addActor(this.worldSeedLabel);
 
         // Current Map Label
-        this.currentMap = new Label("Current map: (" + MapState.currentNode.getX() + ", " + MapState.currentNode.getY() + ")" ,LevelScreen.labelStyle);
-        this.currentMap.setFontScale(0.25f);
-        this.currentMap.setColor(new Color(1f, 1f, 0f, 0.8f));
-        uiStage.addActor(this.currentMap);
+        this.currentMapLabel = new Label("Current map node: (" + MapState.currentNode.getX() + ", " + MapState.currentNode.getY() + ")", LevelScreen.labelStyle);
+        this.currentMapLabel.setFontScale(0.22f);
+        this.currentMapLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
+        uiStage.addActor(this.currentMapLabel);
+
+        // World size Label
+        this.worldSizeLabel = new Label("World size: (" + MapState.worldGenerator.getRows() + " x " + MapState.worldGenerator.getCols() + ")", LevelScreen.labelStyle);
+        this.worldSizeLabel.setFontScale(0.22f);
+        this.worldSizeLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
+        uiStage.addActor(this.worldSizeLabel);
+
+        // Map size Label
+        this.mapSizeLabel = new Label(
+                "Map size: (" + TileMapRenderer.mapWidth + "(" + TileMapRenderer.mapWidth / TileMapRenderer.tileSize + ") x " 
+                + TileMapRenderer.mapHeight + "(" + TileMapRenderer.mapHeight / TileMapRenderer.tileSize + "))",
+                LevelScreen.labelStyle);
+        this.mapSizeLabel.setFontScale(0.22f);
+        this.mapSizeLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
+        uiStage.addActor(this.mapSizeLabel);
 
 
         // UI building for debug UI
@@ -209,10 +226,16 @@ public class LevelScreen extends BaseScreen {
         uiTable.add().left().top();
         uiTable.add().expandX().expandY();
         uiTable.row();
-        uiTable.add(currentMap).left();
+        uiTable.add(currentMapLabel).left();
         uiTable.add();
         uiTable.row();
         uiTable.add(seedLabel).left();
+        uiTable.add();
+        uiTable.row();
+        uiTable.add(mapSizeLabel).left();
+        uiTable.add();
+        uiTable.row();
+        uiTable.add(worldSizeLabel).left();
         uiTable.add();
         uiTable.row();
         uiTable.add(worldSeedLabel).left();
