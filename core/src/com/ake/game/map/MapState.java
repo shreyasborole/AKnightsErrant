@@ -17,7 +17,7 @@ public class MapState {
 
     public static final int worldSize = 16;
 
-    public static int[][] worldMiniMap; // To be removed
+    public static int[][] worldMiniMap;
 
     public static void initialize(long seed) {
         // Debug.clearScreen();

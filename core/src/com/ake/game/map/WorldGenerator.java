@@ -42,6 +42,10 @@ public class WorldGenerator {
         finalizePathMatrix();
     }
 
+    public long getSeed(){
+        return this.seed;
+    }
+
     public MapNode[][] getPathMatrix(){
         return this.pathMatrix;
     }
