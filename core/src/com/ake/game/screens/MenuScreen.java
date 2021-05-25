@@ -113,11 +113,11 @@ public class MenuScreen extends BaseScreen
 
         uiTable.add(title).pad(50f);
         uiTable.row();
-        uiTable.add(startButton).pad(10f);
+        uiTable.add(startButton).pad(5f);
         uiTable.row();
-        uiTable.add(settingsButton).pad(10f);
+        uiTable.add(settingsButton).pad(5f);
         uiTable.row();
-        uiTable.add(exitButton).pad(10f);
+        uiTable.add(exitButton).pad(5f);
         
         
         Debug.endTime = Instant.now();

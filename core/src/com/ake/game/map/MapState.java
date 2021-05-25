@@ -58,13 +58,6 @@ public class MapState {
             new Portal(Portal.Location.RIGHT, 0, 0, stage);
         if (worldGenerator.getTop(x, y) != null)
             new Portal(Portal.Location.TOP, 0, 0, stage);
-
-        // worldGenerator.displayAll();
-        // System.out.println("TOP: " + worldGenerator.getTop(x, y));
-        // System.out.println("BOTTOM: " + worldGenerator.getBottom(x, y));
-        // System.out.println("RIGHT: " + worldGenerator.getRight(x, y));
-        // System.out.println("LEFT: " + worldGenerator.getLeft(x, y));
-        // System.out.println("Current seed: " + currentNode.getSeed());
     }
 
     public static void changeState(Portal.Location location) {
