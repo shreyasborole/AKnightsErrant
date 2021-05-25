@@ -27,6 +27,8 @@ public class LevelScreen extends BaseScreen {
     public static LabelStyle labelStyle;
     private Label fpsLabel;
     private Label seedLabel;
+    private Label worldSeedLabel;
+    private Label currentMap;
 
     private TileMapRenderer mapRenderer;
     private Hero hero;
@@ -180,14 +182,26 @@ public class LevelScreen extends BaseScreen {
         // FPS Label
         this.fpsLabel = new Label("FPS: ", LevelScreen.labelStyle);
         this.fpsLabel.setFontScale(0.3f);
-        this.fpsLabel.setColor(new Color(1f, 1f, 1f, 0.7f));
+        this.fpsLabel.setColor(new Color(1f, 1f, 1f, 1f));
         uiStage.addActor(this.fpsLabel);
 
-        // Seed Label
-        this.seedLabel = new Label("Seed: " + this.mapRenderer.getSeed(), LevelScreen.labelStyle);
-        this.seedLabel.setFontScale(0.2f);
-        this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.7f));
+        // Map Seed Label
+        this.seedLabel = new Label("Map Seed: " + this.mapRenderer.getSeed(), LevelScreen.labelStyle);
+        this.seedLabel.setFontScale(0.25f);
+        this.seedLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
         uiStage.addActor(this.seedLabel);
+
+        // Word Seed Label
+        this.worldSeedLabel = new Label("World Seed: " + MapState.worldGenerator.getSeed(), LevelScreen.labelStyle);
+        this.worldSeedLabel.setFontScale(0.25f);
+        this.worldSeedLabel.setColor(new Color(1f, 1f, 0f, 0.8f));
+        uiStage.addActor(this.worldSeedLabel);
+
+        // Current Map Label
+        this.currentMap = new Label("Current map: (" + MapState.currentNode.getX() + ", " + MapState.currentNode.getY() + ")" ,LevelScreen.labelStyle);
+        this.currentMap.setFontScale(0.25f);
+        this.currentMap.setColor(new Color(1f, 1f, 0f, 0.8f));
+        uiStage.addActor(this.currentMap);
 
 
         // UI building for debug UI
@@ -195,7 +209,13 @@ public class LevelScreen extends BaseScreen {
         uiTable.add().left().top();
         uiTable.add().expandX().expandY();
         uiTable.row();
+        uiTable.add(currentMap).left();
+        uiTable.add();
+        uiTable.row();
         uiTable.add(seedLabel).left();
+        uiTable.add();
+        uiTable.row();
+        uiTable.add(worldSeedLabel).left();
         uiTable.add();
         uiTable.row();
         uiTable.add(fpsLabel).left().bottom();

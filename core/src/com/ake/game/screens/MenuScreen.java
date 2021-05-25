@@ -1,5 +1,6 @@
 package com.ake.game.screens;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.ake.game.*;
 import com.ake.game.core.*;
 import com.ake.game.map.MapState;
@@ -46,6 +47,11 @@ public class MenuScreen extends BaseScreen
         startButton.setColor(new Color(0.08f, 0.08f, 0.04f, 0.7f));
         uiStage.addActor(startButton);
 
+        TextButton settingsButton = new TextButton("Settings", textButtonStyle);
+        settingsButton.scaleBy(0.5f);
+        settingsButton.setColor(new Color(0.08f, 0.08f, 0.04f, 0.7f));
+        uiStage.addActor(settingsButton);
+
         TextButton exitButton = new TextButton("Exit", textButtonStyle);
         exitButton.scaleBy(0.5f);
         exitButton.setColor(new Color(0.08f, 0.08f, 0.04f, 0.7f));
@@ -69,6 +75,24 @@ public class MenuScreen extends BaseScreen
             }
         });
 
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+               settingsButton.setStyle(inactiveTextButtonStyle);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+               settingsButton.setStyle(textButtonStyle);
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                openSettings();
+                return false;
+            }
+        });
+
         exitButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -82,7 +106,7 @@ public class MenuScreen extends BaseScreen
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.exit();
+                exitGame();
                 return false;
             }
         });
@@ -90,6 +114,8 @@ public class MenuScreen extends BaseScreen
         uiTable.add(title).pad(50f);
         uiTable.row();
         uiTable.add(startButton).pad(10f);
+        uiTable.row();
+        uiTable.add(settingsButton).pad(10f);
         uiTable.row();
         uiTable.add(exitButton).pad(10f);
         
@@ -103,6 +129,21 @@ public class MenuScreen extends BaseScreen
         MapState.initialize(new Random().nextLong());
         uiTable.reset();
         AKEGame.setActiveScreen(new LevelScreen());
+    }
+
+    private void openSettings(){
+        this.hide();
+        uiTable.addAction(Actions.sequence(Actions.run(() -> this.triggerFadeOut()), 
+            Actions.run(() -> {
+                AKEGame.setActiveScreen(new SettingsScreen());
+            }
+        )));
+    }
+
+    private void exitGame(){
+        uiTable.addAction(Actions.sequence(Actions.run(() -> this.triggerFadeOut()), Actions.delay(0.1f), Actions.run(() -> {
+            Gdx.app.exit();
+        })));
     }
 
     public void update(float dt){}
