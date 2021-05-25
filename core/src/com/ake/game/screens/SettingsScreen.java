@@ -115,7 +115,5 @@ public class SettingsScreen extends BaseScreen{
     }
 
     @Override
-    public void update(float dt) {
-
-    }
+    public void update(float dt) {}
 }
