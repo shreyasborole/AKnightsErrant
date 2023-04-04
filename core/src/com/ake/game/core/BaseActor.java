@@ -30,7 +30,7 @@ import com.badlogic.gdx.graphics.Camera;
  * collision polygons, movement, world boundaries, and camera scrolling. 
  * Most game objects should extend this class; lists of extensions can be retrieved by stage and class name.
  * @see #Actor
- * @author Lee Stemkoski, Shreyas Borole
+ * @author Shreyas Borole
  */
 public class BaseActor extends Actor
 {
